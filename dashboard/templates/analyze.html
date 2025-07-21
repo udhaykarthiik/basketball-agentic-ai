@@ -1,0 +1,137 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🏀 Basketball Analyzer Pro</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Floating basketball particles -->
+    <div class="basketball-particle">🏀</div>
+    <div class="basketball-particle">🏀</div>
+    <div class="basketball-particle">🏀</div>
+    <div class="basketball-particle">🏀</div>
+    <div class="basketball-particle">🏀</div>
+
+    <!-- Court lines decoration -->
+    <div class="court-lines"></div>
+
+    <div class="main-container">
+        <header class="header">
+            <h1>🏀 Basketball Analyzer Pro</h1>
+        </header>
+
+        <div class="form-container">
+            <form method="POST" id="analyzeForm">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="logs">📝 <strong>Paste Game Logs:</strong></label>
+                    <textarea 
+                        class="form-control" 
+                        name="logs" 
+                        id="logs" 
+                        placeholder="🏀 Enter game data here...&#10;&#10;Example:&#10;Game 1: Player #23 - Points: 28, Rebounds: 12, Assists: 7&#10;Game 1: Player #10 - Points: 15, Rebounds: 5, Assists: 9&#10;Game 2: Player #23 - Points: 32, Rebounds: 8, Assists: 5...">{% if logs %}{{ logs }}{% endif %}</textarea>
+                </div>
+                <button type="submit" class="analyze-btn" id="analyzeButton">
+                    🚀 Analyze Game Data
+                </button>
+            </form>
+        </div>
+
+        {% if results %}
+        <div class="results-section" id="results">
+            <div class="results-grid">
+                <div class="analysis-card combined">
+                    <div class="card-header">
+                        <h5 class="card-title">📊 Combined Analysis</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.combined }}</div>
+                    </div>
+                </div>
+
+                <div class="analysis-card data-collector">
+                    <div class="card-header">
+                        <h5 class="card-title">📥 Data Collector Agent</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.data_collector }}</div>
+                    </div>
+                </div>
+
+                <div class="analysis-card pattern-analyzer">
+                    <div class="card-header">
+                        <h5 class="card-title">🔍 Pattern Analyzer Agent</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.pattern_analyzer }}</div>
+                    </div>
+                </div>
+
+                <div class="analysis-card pattern-finder">
+                    <div class="card-header">
+                        <h5 class="card-title">📈 Pattern Finder Agent</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.pattern_finder }}</div>
+                    </div>
+                </div>
+
+                <div class="analysis-card pattern-improvement">
+                    <div class="card-header">
+                        <h5 class="card-title">⚙️ Pattern Improvement Agent</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.pattern_improvement }}</div>
+                    </div>
+                </div>
+
+                <div class="analysis-card team-strategy">
+                    <div class="card-header">
+                        <h5 class="card-title">🎯 Team Strategy Agent</h5>
+                    </div>
+                    <div class="card-content">
+                        <div class="card-text">{{ results.team_strategy }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Enhanced form submission with animations
+        document.getElementById('analyzeForm').addEventListener('submit', function(e) {
+            const button = document.getElementById('analyzeButton');
+            button.innerHTML = '<span class="loading"></span> Analyzing...';
+            button.disabled = true;
+            button.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                button.style.transform = '';
+            }, 150);
+        });
+
+        // Animate results when they appear
+        {% if results %}
+        window.addEventListener('DOMContentLoaded', function() {
+            const results = document.getElementById('results');
+            const cards = document.querySelectorAll('.analysis-card');
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+            });
+            setTimeout(() => {
+                cards.forEach((card, index) => {
+                    setTimeout(() => {
+                        card.style.transition = 'all 0.6s ease';
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 300);
+        });
+        {% endif %}
+    </script>
+</body>
+</html>
